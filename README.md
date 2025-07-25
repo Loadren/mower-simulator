@@ -1,69 +1,56 @@
-# React + TypeScript + Vite
+# Mower Simulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a web-based simulator for controlling autonomous lawnmowers on a rectangular grid. It provides a visual interface for uploading mower instructions and watching a step-by-step animation of the simulation.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-   **Framework**: React (v19) with Vite
+-   **Language**: TypeScript
+-   **UI Library**: Material-UI (MUI) for components and styling
+-   **Validation**: Zod for type-safe parsing and validation of input files
+-   **Testing**: Jest and Testing Library for unit and end-to-end tests
 
-## Expanding the ESLint configuration
+## How to Run
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Installation
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Clone the repository and install the required dependencies using npm:
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Running the Development Server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+To start the application in development mode, run the following command. The application will be available at `http://localhost:5173`.
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
+```
+
+### 3. Running Tests
+
+To execute the test suite and ensure all logic is working as expected, run:
+
+```bash
+npm test
+```
+
+### Input File Format
+
+The `.txt` file must be structured as follows:
+
+-   **Line 1**: The coordinates of the top-right corner of the lawn (e.g., `55`). The bottom-left corner is assumed to be `00`.
+-   **Succeeding Lines**: Pairs of lines for each mower.
+    -   The first line of the pair is the mower's initial position and orientation (e.g., `12 N`).
+    -   The second line is the sequence of commands (`L`, `R`, `F`) without spaces (e.g., `LFLFLFLFF`).
+
+**Example `input.txt`:**
+
+```
+55
+12 N
+LFLFLFLFF
+33 E
+FFRFFRFRRF
 ```

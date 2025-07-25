@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { fileContentSchema } from '../../domain/parser';
 import { executeCommands } from '../../domain/commands';
-import type { Mower } from '../../domain/mower';
+import type { MowerState } from '../../domain/commands';
 
 export const useMowers = () => {
   const [fileContent, setFileContent] = useState<string>('');
@@ -21,7 +21,7 @@ export const useMowers = () => {
     }
   }, [fileContent]);
 
-  const finalMowers = useMemo((): (Mower[] | null) => {
+  const mowerHistories = useMemo((): MowerState[][] | null => {
     if (!parsedData) {
       return null;
     }
@@ -52,6 +52,7 @@ export const useMowers = () => {
     }
   };
 
+  // Accepts a File directly (for drag-and-drop)
   const handleFileDrop = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -66,7 +67,7 @@ export const useMowers = () => {
   return {
     handleFileChange,
     handleFileDrop,
-    finalMowers,
+    mowerHistories,
     error,
     parsedData,
   };

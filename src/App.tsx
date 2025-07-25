@@ -1,24 +1,22 @@
-import { Container, Alert, Box, Modal, CircularProgress } from '@mui/material';
+import { Container, Typography, Alert, Box, Modal, CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { useMowers } from './app/hooks/useMowers';
 import { FileUpload } from './app/components/FileUpload';
-import { Results } from './app/components/Results';
+import { MowerAnimation } from './app/components/MowerAnimation';
 
 function App() {
-  const { handleFileDrop, finalMowers, error } = useMowers();
+  const { handleFileDrop, mowerHistories, error, parsedData } = useMowers();
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // This is only to show a loading spinner while the file is being processed
-  // Since there is no backend here, we don't need it, but that's how it would have been prepared
-  // waiting for the backend to be ready
   const handleFileChange = async (file: File) => {
     setLoading(true);
-    await new Promise((res) => setTimeout(res, 300));
+    await new Promise((res) => setTimeout(res, 300)); // short delay for spinner effect
     handleFileDrop(file);
     setLoading(false);
-    if (error) return;
-    setModalOpen(true);
+    if (!error) {
+      setModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => setModalOpen(false);
@@ -38,14 +36,27 @@ function App() {
           position="absolute"
           top="50%"
           left="50%"
-          sx={{ transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', p: 4, borderRadius: 2, minWidth: 300 }}
+          sx={{
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            p: 4,
+            borderRadius: 2,
+            minWidth: '80%',
+            maxWidth: '800px',
+          }}
         >
           {loading ? (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight={100}>
               <CircularProgress color="primary" />
             </Box>
+          ) : mowerHistories && parsedData?.lawn ? (
+            <MowerAnimation
+              mowerHistories={mowerHistories}
+              lawn={parsedData.lawn}
+              parsedData={parsedData}
+            />
           ) : (
-            <Results mowers={finalMowers} />
+            <Typography>No data to display.</Typography>
           )}
         </Box>
       </Modal>

@@ -11,6 +11,8 @@ export const isPositionInsideLawn = (
   lawn: Lawn,
   position: { x: number; y: number }
 ) => {
+  // We do "<=" here because lawn.width and lawn.height represent the coordinates of the top right corner
+  // This is NOT a mistake
   return (
     position.x >= 0 &&
     position.x <= lawn.width &&
